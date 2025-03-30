@@ -1,8 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { assets } from "../assets/assets";
 import { AppContext } from "../context/AppContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const RecruiterLogin = () => {
+
+  const navigate = useNavigate()
   const [state, setState] = useState<string>("Login");
   const [name, setName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -15,12 +20,61 @@ const RecruiterLogin = () => {
   if (!context) {
       throw new Error("AppContext must be used within an AppContextProvider");
   }
-  const { setShowRecruiterLogin } = context;
+  const { setShowRecruiterLogin,backendUrl,setCompanyToken,setCompanyData } = context;
   
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (state === "Sign Up" && !isTextDataSubmitted) {
-      setIsTextDataSubmitted(true);
+      return setIsTextDataSubmitted(true);
+    }
+
+    try {
+      if(state === "Login"){
+        const {data} =await axios.post(backendUrl + '/api/company/login',{email,password})
+
+        if(data.success){
+          console.log(data);
+          setCompanyData(data.company)
+          setCompanyToken(data.token)
+          localStorage.setItem('companyToken',data.token)
+          setShowRecruiterLogin(false)
+          navigate('/dashboard')
+        }
+        else{
+          toast.error(data.message)
+        }
+      }else{
+        const formData= new FormData()
+        formData.append('name',name)
+        formData.append('password',password)
+        formData.append('email',email)
+        if (image) {
+          formData.append('image', image);
+        }
+
+        const {data} = await axios.post(backendUrl+'/api/company/register',formData)
+
+        if(data.success){
+          setCompanyData(data.company)
+          setCompanyToken(data.token)
+          localStorage.setItem('companyToken',data.token)
+          setShowRecruiterLogin(false)
+          navigate('/dashboard')
+        }else{
+          toast.error(data.message)
+        }
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // If the error is from Axios
+        toast.error(error.response?.data?.message || "Something went wrong!");
+      } else if (error instanceof Error) {
+        // If the error is a generic JS error
+        toast.error(error.message);
+      } else {
+        // If the error type is unknown
+        toast.error("An unexpected error occurred!");
+      }
     }
   };
 

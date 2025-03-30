@@ -1,6 +1,9 @@
 import Quill from "quill";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { JobCategories, JobLocations } from "../assets/assets";
+import axios from "axios";
+import { AppContext } from "../context/AppContext";
+import { toast } from "react-toastify";
 
 const AddJob = () => {
   const [title, setTitle] = useState<string>("");
@@ -12,6 +15,38 @@ const AddJob = () => {
   const editorRef = useRef<HTMLDivElement | null>(null);
   const quillRef = useRef<Quill | null>(null);
 
+  const context = useContext(AppContext);
+    if (!context) {
+        throw new Error("AppContext must be used within an AppContextProvider");
+    }
+    const {backendUrl,companyToken} = context;
+
+  const onSubmitHandler = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      if (!quillRef.current) {
+        toast.error("Editor is not initialized!");
+        return;
+      }
+      const description = quillRef.current.root.innerHTML
+
+      const {data} =await axios.post(backendUrl+'/api/company/post-job',{title,description,location ,salary,category,level},
+        {headers:{token:companyToken}}
+      )
+      if(data.success){
+        toast.success(data.message)
+        setTitle("")
+        setSalary(0)
+        quillRef.current.root.innerHTML=""
+      } else{
+        toast.error(data.message)
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Something went wrong");
+    }
+  } 
+
   useEffect(() => {
     // Initiate quill only once
     if (!quillRef.current && editorRef.current) {
@@ -21,7 +56,7 @@ const AddJob = () => {
     }
   }, []);
   return (
-    <form className="container p-4 flex flex-col w-full items-start gap-3">
+    <form onSubmit={onSubmitHandler} className="container p-4 flex flex-col w-full items-start gap-3">
       <div className="w-full">
         <p className="mb-2">Job Title</p>
         <input

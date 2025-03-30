@@ -197,6 +197,7 @@ export interface Job {
     salary: number;
     date: number;
     category: string;
+    applicants:number;
 }
 export const jobsData :Job[] = [
     {
@@ -231,6 +232,7 @@ export const jobsData :Job[] = [
         salary: 82000,
         date: 1729681667114,
         category: "Programming",
+        applicants:32
     },
     {
         _id: '2',
@@ -264,6 +266,7 @@ export const jobsData :Job[] = [
         salary: 72000,
         date: 1729681667114,
         category: "Data Science",
+        applicants:32
     },
     {
         _id: '3',
@@ -297,6 +300,7 @@ export const jobsData :Job[] = [
         salary: 61000,
         date: 1729681667114,
         category: "Designing",
+        applicants:32
     },
     {
         _id: '4',
@@ -330,6 +334,7 @@ export const jobsData :Job[] = [
         salary: 53000,
         date: 1729681667114,
         category: "Programming",
+        applicants:32
     },
     {
         _id: '5',
@@ -363,6 +368,7 @@ export const jobsData :Job[] = [
         salary: 91000,
         date: 1729681667114,
         category: "Programming",
+        applicants:32
     },
     {
         _id: '6',
@@ -396,6 +402,7 @@ export const jobsData :Job[] = [
         salary: 77000,
         date: 1729681667114,
         category: "Networking",
+        applicants:32
     },
     {
         _id: '7',
@@ -429,6 +436,7 @@ export const jobsData :Job[] = [
         salary: 60000,
         date: 1729681667114,
         category: "Management",
+        applicants:32
     },
     {
         _id: '8',
@@ -462,6 +470,7 @@ export const jobsData :Job[] = [
         salary: 112000,
         date: 1729681667114,
         category: "Programming",
+        applicants:32
     },
     {
         _id: '9',
@@ -495,6 +504,7 @@ export const jobsData :Job[] = [
         salary: 96000,
         date: 1729681667114,
         category: "Programming",
+        applicants:32
     },
     {
         _id: '10',
@@ -528,6 +538,7 @@ export const jobsData :Job[] = [
         salary: 72000,
         date: 1729681667114,
         category: "Marketing",
+        applicants:32
     },
     {
         _id: '11',
@@ -561,6 +572,7 @@ export const jobsData :Job[] = [
         salary: 62000,
         date: 1729681667114,
         category: "Cybersecurity",
+        applicants:32
     },
     {
         _id: '12',
@@ -594,6 +606,7 @@ export const jobsData :Job[] = [
         salary: 68000,
         date: 1729681667114,
         category: "Management",
+        applicants:32
     },
     {
         _id: '13',
@@ -627,6 +640,7 @@ export const jobsData :Job[] = [
         salary: 77000,
         date: 1729681667114,
         category: "Marketing",
+        applicants:32
     },
     {
         _id: '14',
@@ -660,6 +674,7 @@ export const jobsData :Job[] = [
         salary: 65000,
         date: 1729681667114,
         category: "Data Science",
+        applicants:32
     },
     {
         _id: '15',
@@ -693,6 +708,7 @@ export const jobsData :Job[] = [
         salary: 64000,
         date: 1729681667114,
         category: "Design",
+        applicants:32
     },
     {
         _id: '16',
@@ -726,6 +742,7 @@ export const jobsData :Job[] = [
         salary: 74000,
         date: 1729681667114,
         category: "Programming",
+        applicants:32
     },
     {
         _id: '17',
@@ -759,6 +776,7 @@ export const jobsData :Job[] = [
         salary: 59000,
         date: 1729681667114,
         category: "Marketing",
+        applicants:32
     },
     {
         _id: '18',
@@ -792,6 +810,7 @@ export const jobsData :Job[] = [
         salary: 89000,
         date: 1729681667114,
         category: "Management",
+        applicants:32
     },
     {
         _id: '19',
@@ -825,6 +844,7 @@ export const jobsData :Job[] = [
         salary: 99000,
         date: 1729681667114,
         category: "Marketing",
+        applicants:32
     },
     {
         _id: '20',
@@ -858,6 +878,7 @@ export const jobsData :Job[] = [
         salary: 91000,
         date: 1729681667114,
         category: "Design",
+        applicants:32
     },
     {
         _id: '21',
@@ -891,6 +912,7 @@ export const jobsData :Job[] = [
         salary: 123000,
         date: 1729681667114,
         category: "Programming",
+        applicants:32
     },
     {
         _id: '22',
@@ -924,6 +946,7 @@ export const jobsData :Job[] = [
         salary: 87000,
         date: 1729681667114,
         category: "Cybersecurity",
+        applicants:32
     },
     {
         _id: '23',
@@ -957,5 +980,6 @@ export const jobsData :Job[] = [
         salary: 102000,
         date: 1729681667114,
         category: "Programming",
+        applicants:32
     }
 ];
