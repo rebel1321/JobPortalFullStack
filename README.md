@@ -1,9 +1,11 @@
 🚀 Job Portal Website
+
 After a month of development, the moment every developer eagerly awaits has finally arrived—the project is complete! 🎉
 
 This Job Portal Website is designed to connect job seekers with recruiters, providing a seamless and efficient hiring process.
 
 🛠 Tech Stack
+
 Frontend: React + Tailwind CSS
 
 Backend: Node.js + Express.js
