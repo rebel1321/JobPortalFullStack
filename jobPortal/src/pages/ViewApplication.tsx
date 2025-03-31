@@ -36,7 +36,7 @@ const ViewApplication = () => {
         }
         const { backendUrl,companyToken } = context;
 
-  const [applicants,setApplicants] = useState<Application[]>([])
+  const [applicants,setApplicants] = useState<Application[]>()
 
   //Function to fetch  company job application data
   const fetchCompanyJobApplications = async ()=>{
@@ -45,12 +45,12 @@ const ViewApplication = () => {
         {headers:{token:companyToken}}
       )
       if(data.success){
-        setApplicants(data.appications.reverse)
+        setApplicants(data.applications.reverse())
       }else{
         toast.error(data.message)
       }
     }catch (error: any) {
-          toast.error(error.response?.data?.message || "Something went wrong");
+          toast.error(error.response?.data?.message );
         }
   }
 
@@ -79,8 +79,8 @@ try {
     }
   },[companyToken])
   return applicants? applicants.length===0?(
-    <div className="flex items-center justify-center h-[70vh">
-    <p className="text-xl sm:text-2xl">No Jobs Available or posted</p>
+    <div className="flex items-center justify-center h-[70vh]">
+    <p className="text-xl sm:text-2xl">No Applications Available </p>
   </div>): (
     <div className="container mx-auto p-4">
         <div>

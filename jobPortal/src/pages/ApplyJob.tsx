@@ -59,7 +59,7 @@ const ApplyJob = () => {
       toast.error(data.message)
     }
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "Something went wrong");
+      toast.error(error.response?.data?.message);
     }
   }
 
@@ -94,8 +94,12 @@ const ApplyJob = () => {
   }
 
   const checkAlreadyApplied = () =>{
-    const hasApplied = userApplications.some(item => item.jobId._id === JobData?._id )
-    setIsAlreadyApplied(hasApplied)
+
+
+  const hasApplied = userApplications.some(item => item.jobId._id === JobData?._id);
+  
+  console.log("Has Applied:", hasApplied); // Debugging output
+  setIsAlreadyApplied(hasApplied);
   }
 
 
@@ -105,7 +109,7 @@ const ApplyJob = () => {
   }, [id]);
 
   useEffect(()=>{
-    if(userApplications.length>0 && JobData){
+    if( JobData && userApplications.length>0 ){
       checkAlreadyApplied()
     }
   },[JobData,userApplications,id])

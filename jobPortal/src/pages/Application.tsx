@@ -47,7 +47,7 @@ const Application = () => {
             toast.error(data.message)
           }
         }catch (error: any) {
-          toast.error(error.response?.data?.message || "Something went wrong");
+          toast.error(error.response?.data?.message );
         }
         setIsEdit(false)
         setResume(null)

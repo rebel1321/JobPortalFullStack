@@ -27,7 +27,7 @@ interface Jobs {
 const ManageJobs = () => {
   const navigate =useNavigate()
 
-  const [jobs,setJobs] = useState<Jobs[]>([])
+  const [jobs,setJobs] = useState<Jobs[]>()
 
   const context = useContext(AppContext);
     if (!context) {
@@ -79,7 +79,7 @@ const ManageJobs = () => {
       fetchCompanyJobs()
     }
   },[companyToken])
-  return jobs? jobs.length === 0 ? (<div className="flex items-center justify-center h-[70vh">
+  return jobs? jobs.length === 0 ? (<div className="flex items-center justify-center h-[70vh]">
     <p className="text-xl sm:text-2xl">No Jobs Available or posted</p>
   </div>):(
     <div className="container p-4 max-w-5xl">

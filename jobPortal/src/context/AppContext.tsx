@@ -113,7 +113,7 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
       }
       
     }catch (error: any) {
-      toast.error(error.response?.data?.message || "Something went wrong");
+      toast.error(error.response?.data?.message);
     }
   }
 
@@ -131,7 +131,7 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
         toast.error(data.message)
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "Something went wrong");
+      toast.error(error.response?.data?.message );
     }
   }
 //Function to fetch user's applied application data
@@ -147,7 +147,7 @@ export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children
         toast.error(data.message)
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "Something went wrong");
+      toast.error(error.response?.data?.message );
     }
   }
   useEffect(() => {

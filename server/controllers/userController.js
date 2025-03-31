@@ -30,7 +30,7 @@ export const applyForJob =async (req,res)=>{
     const userId=req.auth.userId
 
     try {
-        const isAlreadyApplied = await JobApplication.find({jobId,userId})
+        const isAlreadyApplied = await JobApplication.findOne({jobId,userId})
 
         if(isAlreadyApplied){
             return res.json({success:false,message:'Already Applied'})
@@ -67,12 +67,12 @@ export const getUserJobApplications =async (req,res)=>{
         
         const userId = req.auth.userId
 
-        const application = await JobApplication.find({userId})
+        const applications = await JobApplication.find({userId})
         .populate('companyId','name email image')
-        .populate('jobId','title description location category level ssalary')
+        .populate('jobId','title description location category level salary')
         .exec()
 
-        if(!application){
+        if(!applications){
             return res.json({success : false,message:'No job applications found'})
         }
 
