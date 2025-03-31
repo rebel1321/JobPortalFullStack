@@ -61,7 +61,7 @@ interface AppContextProviderProps {
 }
 
 export const AppContextProvider: React.FC<AppContextProviderProps> = ({ children }) => {
-  const backendUrl: string = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"; 
+  const backendUrl: string = import.meta.env.VITE_BACKEND_URL ; 
   const {user} = useUser()
   const {getToken} = useAuth()
 
