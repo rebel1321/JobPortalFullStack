@@ -10,12 +10,14 @@ import jobRoutes from './routes/jobRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import connectCloudinary from './config/cloudinary.js'
 import {clerkMiddleware} from '@clerk/express'
+import { connectRedis } from './config/redis.js'
 //Initialise express 
 const app = express()
 
 //Connect to database
 await connectDB()
 await connectCloudinary()
+await connectRedis()
 
 //Middlewares
 app.use(cors())

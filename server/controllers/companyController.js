@@ -4,6 +4,7 @@ import {v2 as cloudinary} from 'cloudinary'
 import generateToken from "../utils/generateToken.js"
 import Job from "../models/Job.js"
 import JobApplication from "../models/jobApplication.js"
+import { redisClient } from "../config/redis.js"
 
 //Register a new Company
 
@@ -119,6 +120,10 @@ export const postJob = async(req,res)=>{
         })
 
         await newJob.save()
+
+        // Invalidate the all_jobs cache since a new job was added
+        await redisClient.del('all_jobs');
+
         res.json({success:true,newJob})
     } catch (error) {
         res.json({success:false,message:error.message})
@@ -192,6 +197,10 @@ export const changeVisibility =async(req,res)=>{
             job.visible =!job.visible
         }
         await job.save()
+
+        // Invalidate caches since job visibility changed
+        await redisClient.del('all_jobs');
+        await redisClient.del(`job_${id}`);
 
         res.json({success:true,job})
     } catch (error) {
