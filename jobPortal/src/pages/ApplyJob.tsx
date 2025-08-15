@@ -95,8 +95,9 @@ const ApplyJob = () => {
 
   const checkAlreadyApplied = () =>{
 
-
-  const hasApplied = userApplications.some(item => item.jobId._id === JobData?._id);
+  const hasApplied = userApplications.some(item => 
+    item.jobId && item.jobId._id === JobData?._id
+  );
   
   console.log("Has Applied:", hasApplied); // Debugging output
   setIsAlreadyApplied(hasApplied);

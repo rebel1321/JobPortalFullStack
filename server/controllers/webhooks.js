@@ -1,5 +1,6 @@
 import { Webhook } from "svix";
 import User from "../models/User.js";
+import { redisClient } from "../config/redis.js";
 
 // API Controller function to manage Clerk user with database
 export const clerkWebhooks = async (req, res) => {
@@ -37,7 +38,6 @@ export const clerkWebhooks = async (req, res) => {
                         resume: ""
                     };
                     await User.create(userData);
-                    console.log("User Created:", userData);
                     return res.json({});
                 } catch (error) {
                     console.error("User Creation Error:", error.message);
@@ -52,6 +52,10 @@ export const clerkWebhooks = async (req, res) => {
                         image: data.image_url,
                     };
                     await User.findByIdAndUpdate(data.id, userData);
+                    
+                    // Invalidate user cache since user data was updated
+                    await redisClient.del(`user_${data.id}`);
+                    
                     return res.json({});
                 } catch (error) {
                     console.error("User Update Error:", error.message);
@@ -61,6 +65,11 @@ export const clerkWebhooks = async (req, res) => {
             case 'user.deleted': {
                 try {
                     await User.findByIdAndDelete(data.id);
+                    
+                    // Invalidate user cache since user was deleted
+                    await redisClient.del(`user_${data.id}`);
+                    await redisClient.del(`user_applications_${data.id}`);
+                    
                     return res.json({});
                 } catch (error) {
                     console.error("User Deletion Error:", error.message);

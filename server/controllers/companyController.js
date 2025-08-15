@@ -34,6 +34,10 @@ export const registerCompany = async(req,res)=>{
             password: hashPassword,
             image: imageUpload.secure_url
         })
+
+        // No need to cache here since this is a new company
+        // Auth cache will be created on first authenticated request
+
         res.json({
             success:true,
             company :{
@@ -95,7 +99,20 @@ export const loginCompany = async(req,res)=>{
  //Get company data 
 export const getCompanyData = async(req,res)=>{
     try {
-        const company =req.company
+        const company = req.company
+        const companyId = company._id
+
+        // Check if company data is cached
+        const cacheKey = `company_${companyId}`;
+        const cachedCompany = await redisClient.get(cacheKey);
+        
+        if (cachedCompany) {
+            return res.json({ success: true, company: JSON.parse(cachedCompany) });
+        }
+
+        // Cache the company data for 30 minutes (1800 seconds)
+        await redisClient.setEx(cacheKey, 1800, JSON.stringify(company));
+
         res.json({success:true,company})
     } catch (error) {
         res.json({success:false,message:error.message})
@@ -121,8 +138,9 @@ export const postJob = async(req,res)=>{
 
         await newJob.save()
 
-        // Invalidate the all_jobs cache since a new job was added
+        // Invalidate relevant caches since a new job was added
         await redisClient.del('all_jobs');
+        await redisClient.del(`company_jobs_${companyId}`);
 
         res.json({success:true,newJob})
     } catch (error) {
@@ -135,11 +153,22 @@ export const getCompanyJobApplicants =async(req,res)=>{
         try {
             const companyId = req.company._id
 
+            // Check if company applicants are cached
+            const cacheKey = `company_applicants_${companyId}`;
+            const cachedApplicants = await redisClient.get(cacheKey);
+            
+            if (cachedApplicants) {
+                return res.json({ success: true, applications: JSON.parse(cachedApplicants) });
+            }
+
             //Find job applications for the user  and populate related data
             const applications = await JobApplication.find({companyId})
             .populate('userId','name image resume')
             .populate('jobId','title location category level salary')
             .exec()
+
+            // Cache the applications for 5 minutes (300 seconds)
+            await redisClient.setEx(cacheKey, 300, JSON.stringify(applications));
 
             return res.json({success:true,applications})
         } catch (error) {
@@ -152,6 +181,15 @@ export const getCompanyPostedJobs = async(req,res)=>{
 
     try {
         const companyId = req.company._id
+
+        // Check if company posted jobs are cached
+        const cacheKey = `company_jobs_${companyId}`;
+        const cachedJobs = await redisClient.get(cacheKey);
+        
+        if (cachedJobs) {
+            return res.json({ success: true, jobsData: JSON.parse(cachedJobs) });
+        }
+
         const jobs =await Job.find({companyId})
 
         // Adding no of applicants info in data
@@ -159,6 +197,10 @@ export const getCompanyPostedJobs = async(req,res)=>{
             const applicants = await JobApplication.find({jobId:job._id});
             return {...job.toObject(),applicants:applicants.length}
         }))
+
+        // Cache the jobs data for 10 minutes (600 seconds)
+        await redisClient.setEx(cacheKey, 600, JSON.stringify(jobsData));
+
         res.json({success:true,jobsData})
 
     } catch (error) {
@@ -171,11 +213,22 @@ export const ChangeJobApplicationStatus = async(req,res)=>{
     try {
         const {id,status}=req.body
 
-    //Find Job Application Status
+        //Find Job Application Status
+        const application = await JobApplication.findOneAndUpdate({_id: id},{status}, {new: true})
+        .populate('userId', '_id')
+        .populate('jobId', 'companyId');
 
-    await JobApplication.findOneAndUpdate({_id: id},{status})
+        if (application) {
+            // Invalidate relevant caches
+            const companyId = application.jobId.companyId;
+            const userId = application.userId._id;
+            
+            await redisClient.del(`company_applicants_${companyId}`);
+            await redisClient.del(`company_jobs_${companyId}`);
+            await redisClient.del(`user_applications_${userId}`);
+        }
 
-    res.json({success:true,message:'Status Changed'})
+        res.json({success:true,message:'Status Changed'})
     } catch (error) {
         res.json({success:false,message:error.message})
 
@@ -201,6 +254,7 @@ export const changeVisibility =async(req,res)=>{
         // Invalidate caches since job visibility changed
         await redisClient.del('all_jobs');
         await redisClient.del(`job_${id}`);
+        await redisClient.del(`company_jobs_${companyId}`);
 
         res.json({success:true,job})
     } catch (error) {
