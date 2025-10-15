@@ -11,6 +11,7 @@ import userRoutes from './routes/userRoutes.js'
 import connectCloudinary from './config/cloudinary.js'
 import {clerkMiddleware} from '@clerk/express'
 import { connectRedis } from './config/redis.js'
+import scheduleAwake from './utils/keepAlive.js'
 //Initialise express 
 const app = express()
 
@@ -44,4 +45,6 @@ Sentry.setupExpressErrorHandler(app);
 app.listen(PORT,()=>{
     console.log(`Server is running on port ${PORT}`);
     
+    // Initialize keep-alive cron job to prevent Render free tier sleep
+    scheduleAwake();
 })
