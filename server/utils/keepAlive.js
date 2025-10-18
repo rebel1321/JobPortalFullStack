@@ -1,7 +1,6 @@
 import cron from 'node-cron';
 
 const scheduleAwake = () => {
-  // Keep server awake by pinging itself every 10 minutes (Render free tier sleeps after 15 minutes)
   cron.schedule('*/10 * * * *', async () => {
     try {
       const serverUrl = process.env.RENDER_EXTERNAL_URL || 'http://localhost:5000';
