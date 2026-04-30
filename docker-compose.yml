@@ -1,0 +1,22 @@
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: node-backend
+    env_file:
+      - ./server/.env
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+
+  app:
+    build:
+      context: ./jobPortal
+      dockerfile: Dockerfile
+    container_name: job-portal-frontend
+    depends_on:
+      - server
+    ports:
+      - "3000:80"
+    restart: unless-stopped
