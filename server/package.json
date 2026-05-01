@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "server": "nodemon server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
+    "test:watch": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --watch"
   },
   "author": "",
   "license": "ISC",
@@ -25,5 +27,9 @@
     "nodemon": "^3.1.9",
     "redis": "^5.8.1",
     "svix": "^1.42.0"
+  },
+  "devDependencies": {
+    "jest": "^30.0.5",
+    "supertest": "^7.1.1"
   }
 }
