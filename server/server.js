@@ -15,9 +15,7 @@ const PORT = process.env.PORT || process.env.port || 5000
 
 Sentry.setupExpressErrorHandler(app);
 
-app.listen(PORT,()=>{
-    console.log(`Server is running on port ${PORT}`);
-    
-    // Initialize keep-alive cron job to prevent Render free tier sleep
-    scheduleAwake();
-})
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on ${PORT}`);
+  scheduleAwake()
+});
