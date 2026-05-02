@@ -67,3 +67,11 @@ jobs:
         run: |
           docker tag server-ci $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      # 🚀 Deploy to ECS
+      - name: Deploy to ECS
+        if: github.event_name == 'push'
+        run: |
+          aws ecs update-service \
+            --cluster ${{ secrets.ECS_CLUSTER }} \
+            --service ${{ secrets.ECS_SERVICE }} \
+            --force-new-deployment
