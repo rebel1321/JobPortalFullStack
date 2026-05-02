@@ -12,7 +12,7 @@ app.use(cors())
 app.use(express.json())
 app.use(clerkMiddleware())
 
-app.get('/', (req, res) => res.send('API Working'))
+app.get('/', (req, res) => res.send('API Working Fine!'))
 
 app.get('/debug-sentry', function mainHandler(req, res) {
   throw new Error('My first Sentry error!')
